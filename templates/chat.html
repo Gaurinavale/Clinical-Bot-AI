@@ -1,0 +1,731 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinical Bot AI | Medical Assistant</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #f5f8fc;
+            color: #172b4d;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .app {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 265px;
+            background: #101d35;
+            color: white;
+            padding: 28px 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .brand-icon {
+            width: 43px;
+            height: 43px;
+            border-radius: 13px;
+            background: linear-gradient(135deg, #20c6b5, #168fbd);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 23px;
+        }
+
+        .brand h2 {
+            font-family: 'Manrope', sans-serif;
+            font-size: 17px;
+        }
+
+        .brand span {
+            display: block;
+            color: #91a4c3;
+            font-size: 11px;
+            margin-top: 3px;
+        }
+
+        .new-chat {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #34445f;
+            background: #1b2b47;
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            text-align: left;
+            margin-bottom: 35px;
+        }
+
+        .new-chat:hover {
+            background: #263b5c;
+        }
+
+        .side-label {
+            color: #8394b1;
+            font-size: 11px;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        .history-item {
+            padding: 12px;
+            border-radius: 9px;
+            color: #c5d1e3;
+            font-size: 13px;
+            background: #1b2b47;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            border-top: 1px solid #2b3b56;
+            padding-top: 20px;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            color: #c5d1e3;
+            font-size: 12px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #28c99a;
+            border-radius: 50%;
+        }
+
+        .sidebar-note {
+            color: #8191ac;
+            font-size: 11px;
+            margin-top: 12px;
+            line-height: 1.6;
+        }
+
+        /* Main area */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .topbar {
+            height: 75px;
+            background: white;
+            border-bottom: 1px solid #e8edf4;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 38px;
+        }
+
+        .topbar h3 {
+            font-family: 'Manrope', sans-serif;
+            font-size: 16px;
+        }
+
+        .topbar p {
+            color: #8794a8;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .top-tag {
+            padding: 8px 13px;
+            border-radius: 20px;
+            background: #e9f8f5;
+            color: #159b84;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Chat section */
+        .chat-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 35px 20px;
+        }
+
+        .chat-content {
+            max-width: 850px;
+            margin: auto;
+        }
+
+        .welcome {
+            text-align: center;
+            margin: 35px auto 35px;
+        }
+
+        .welcome-icon {
+            width: 75px;
+            height: 75px;
+            margin: auto auto 20px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, #dff9f5, #e2f1ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+        }
+
+        .welcome h1 {
+            font-family: 'Manrope', sans-serif;
+            font-size: 29px;
+            font-weight: 800;
+            color: #172b4d;
+        }
+
+        .welcome h1 span {
+            color: #13a997;
+        }
+
+        .welcome p {
+            color: #8794a8;
+            font-size: 14px;
+            margin-top: 10px;
+            line-height: 1.7;
+        }
+
+        /* Suggested questions */
+        .suggestions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 13px;
+            margin: 30px 0;
+        }
+
+        .suggestion {
+            text-align: left;
+            background: white;
+            border: 1px solid #e7edf4;
+            padding: 17px;
+            border-radius: 13px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .suggestion:hover {
+            border-color: #23b9a8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(24, 67, 93, 0.06);
+        }
+
+        .suggestion .emoji {
+            font-size: 21px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .suggestion strong {
+            font-size: 13px;
+            color: #263b59;
+            display: block;
+        }
+
+        .suggestion small {
+            color: #8a98aa;
+            font-size: 11px;
+            display: block;
+            margin-top: 5px;
+        }
+
+        /* Messages */
+        .message {
+            display: flex;
+            gap: 12px;
+            margin: 25px 0;
+            align-items: flex-start;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .avatar {
+            min-width: 37px;
+            width: 37px;
+            height: 37px;
+            border-radius: 12px;
+            background: #def7f2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+        }
+
+        .user .avatar {
+            background: #e5edff;
+        }
+
+        .message-content {
+            max-width: 75%;
+        }
+
+        .message-name {
+            font-size: 11px;
+            font-weight: 700;
+            color: #8794a8;
+            margin-bottom: 7px;
+        }
+
+        .bubble {
+            padding: 15px 18px;
+            border-radius: 4px 14px 14px 14px;
+            background: white;
+            border: 1px solid #e8edf4;
+            font-size: 14px;
+            line-height: 1.7;
+            color: #40516b;
+            overflow-wrap: anywhere;
+            white-space: pre-wrap;
+        }
+
+        .user .bubble {
+            background: #e8f4ff;
+            border: none;
+            border-radius: 14px 4px 14px 14px;
+            color: #244b78;
+        }
+
+        .typing {
+            color: #8a98aa;
+            font-size: 13px;
+            padding: 12px 0;
+        }
+
+        /* Input area */
+        .input-area {
+            background: white;
+            border-top: 1px solid #e8edf4;
+            padding: 20px 25px 15px;
+        }
+
+        .input-wrapper {
+            max-width: 850px;
+            margin: auto;
+        }
+
+        .input-box {
+            display: flex;
+            align-items: center;
+            background: #f7f9fc;
+            border: 1px solid #e1e8f0;
+            border-radius: 15px;
+            padding: 7px 8px 7px 18px;
+            transition: 0.2s;
+        }
+
+        .input-box:focus-within {
+            border-color: #20b6a5;
+            box-shadow: 0 0 0 3px rgba(32, 182, 165, 0.09);
+        }
+
+        #question {
+            flex: 1;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-family: inherit;
+            font-size: 14px;
+            color: #263b59;
+            padding: 12px 0;
+            min-width: 0;
+        }
+
+        #question::placeholder {
+            color: #a0aabd;
+        }
+
+        #send-btn {
+            width: 43px;
+            height: 43px;
+            border: none;
+            border-radius: 11px;
+            background: #12a997;
+            color: white;
+            font-size: 19px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        #send-btn:hover {
+            background: #0b8f80;
+        }
+
+        #send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .disclaimer {
+            text-align: center;
+            font-size: 10px;
+            color: #9ba7b7;
+            margin-top: 12px;
+        }
+
+        @media(max-width: 700px) {
+            .sidebar {
+                display: none;
+            }
+
+            .topbar {
+                padding: 0 18px;
+            }
+
+            .chat-area {
+                padding: 20px 15px;
+            }
+
+            .welcome {
+                margin: 25px auto;
+            }
+
+            .welcome h1 {
+                font-size: 23px;
+            }
+
+            .suggestions {
+                grid-template-columns: 1fr;
+            }
+
+            .input-area {
+                padding: 15px 12px;
+            }
+
+            .message-content {
+                max-width: 85%;
+            }
+
+            .top-tag {
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">✚</div>
+            <div>
+                <h2>Clinical Bot AI</h2>
+                <span>Intelligent Healthcare Assistant</span>
+            </div>
+        </div>
+
+        <button class="new-chat" id="new-chat">
+            ＋ &nbsp; New conversation
+        </button>
+
+        <div class="side-label">YOUR WORKSPACE</div>
+
+        <div class="history-item">
+            💬 &nbsp; Current conversation
+        </div>
+
+        <div class="sidebar-bottom">
+            <div class="status">
+                <span class="status-dot"></span>
+                AI Assistant
+            </div>
+
+            <p class="sidebar-note">
+                Powered by RAG technology, medical knowledge retrieval
+                and AI-generated responses.
+            </p>
+        </div>
+
+    </aside>
+
+
+    <!-- Main content -->
+    <main class="main">
+
+        <header class="topbar">
+            <div>
+                <h3>Medical Assistant</h3>
+                <p>Ask questions and explore medical information</p>
+            </div>
+
+            <div class="top-tag">✦ AI Powered</div>
+        </header>
+
+
+        <!-- Chat area -->
+        <section class="chat-area" id="chat-area">
+
+            <div class="chat-content" id="chat-box">
+
+                <div class="welcome" id="welcome">
+
+                    <div class="welcome-icon">🩺</div>
+
+                    <h1>Your Health, <span>Our Knowledge.</span></h1>
+
+                    <p>
+                        Welcome to Clinical Bot AI.<br>
+                        Ask a medical question to explore information
+                        from your medical knowledge base.
+                    </p>
+
+                </div>
+
+
+                <!-- Suggested questions -->
+                <div class="suggestions" id="suggestions">
+
+                    <button class="suggestion" data-question="What is diabetes?">
+                        <span class="emoji">🩸</span>
+                        <strong>What is diabetes?</strong>
+                        <small>Understand causes and symptoms</small>
+                    </button>
+
+                    <button class="suggestion" data-question="What are the symptoms of heart disease?">
+                        <span class="emoji">❤️</span>
+                        <strong>Heart health</strong>
+                        <small>Learn about heart disease symptoms</small>
+                    </button>
+
+                    <button class="suggestion" data-question="What causes high blood pressure?">
+                        <span class="emoji">🫀</span>
+                        <strong>Blood pressure</strong>
+                        <small>Understand hypertension</small>
+                    </button>
+
+                    <button class="suggestion" data-question="What are the symptoms of anemia?">
+                        <span class="emoji">🧬</span>
+                        <strong>Learn about anemia</strong>
+                        <small>Explore common symptoms</small>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Input -->
+        <footer class="input-area">
+
+            <div class="input-wrapper">
+
+                <form id="chat-form">
+
+                    <div class="input-box">
+
+                        <input
+                            type="text"
+                            id="question"
+                            placeholder="Ask anything about medical information..."
+                            autocomplete="off"
+                            required
+                        >
+
+                        <button type="submit" id="send-btn" aria-label="Send message">
+                            ➤
+                        </button>
+
+                    </div>
+
+                </form>
+
+                <p class="disclaimer">
+                    Clinical Bot AI provides educational information only.
+                    It is not a substitute for professional medical advice.
+                </p>
+
+            </div>
+
+        </footer>
+
+    </main>
+
+</div>
+
+
+<script>
+
+    const form = document.getElementById("chat-form");
+    const questionInput = document.getElementById("question");
+    const chatBox = document.getElementById("chat-box");
+    const chatArea = document.getElementById("chat-area");
+    const sendButton = document.getElementById("send-btn");
+    const welcome = document.getElementById("welcome");
+    const suggestions = document.getElementById("suggestions");
+
+    function addMessage(text, sender) {
+
+        const message = document.createElement("div");
+        message.className = "message " + sender;
+
+        const avatar = document.createElement("div");
+        avatar.className = "avatar";
+        avatar.textContent = sender === "user" ? "👤" : "🤖";
+
+        const content = document.createElement("div");
+        content.className = "message-content";
+
+        const name = document.createElement("div");
+        name.className = "message-name";
+        name.textContent = sender === "user" ? "YOU" : "CLINICAL BOT AI";
+
+        const bubble = document.createElement("div");
+        bubble.className = "bubble";
+
+        // textContent prevents user input from being interpreted as HTML
+        bubble.textContent = text;
+
+        content.appendChild(name);
+        content.appendChild(bubble);
+
+        if (sender === "user") {
+            message.appendChild(content);
+            message.appendChild(avatar);
+        } else {
+            message.appendChild(avatar);
+            message.appendChild(content);
+        }
+
+        chatBox.appendChild(message);
+        chatArea.scrollTop = chatArea.scrollHeight;
+
+        return message;
+    }
+
+
+    async function sendQuestion(question) {
+
+        question = question.trim();
+
+        if (!question || sendButton.disabled) return;
+
+        welcome.style.display = "none";
+        suggestions.style.display = "none";
+
+        addMessage(question, "user");
+
+        questionInput.value = "";
+        sendButton.disabled = true;
+
+        const loading = document.createElement("div");
+        loading.className = "typing";
+        loading.textContent = "🤖 Clinical Bot AI is thinking...";
+        chatBox.appendChild(loading);
+
+        chatArea.scrollTop = chatArea.scrollHeight;
+
+        try {
+
+            const response = await fetch("/get", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ msg: question })
+            });
+
+            if (!response.ok) {
+                throw new Error("Server returned an error: " + response.status);
+            }
+
+            const data = await response.json();
+
+            loading.remove();
+
+            addMessage(
+                data.answer || "Sorry, I could not generate an answer.",
+                "bot"
+            );
+
+        } catch (error) {
+
+            loading.remove();
+
+            addMessage(
+                "Sorry, something went wrong while connecting to the AI assistant. Please try again.",
+                "bot"
+            );
+
+            console.error(error);
+
+        } finally {
+
+            sendButton.disabled = false;
+            questionInput.focus();
+
+        }
+
+    }
+
+
+    form.addEventListener("submit", function(event) {
+        event.preventDefault();
+        sendQuestion(questionInput.value);
+    });
+
+
+    // Suggested question buttons
+    document.querySelectorAll(".suggestion").forEach(button => {
+
+        button.addEventListener("click", function() {
+            sendQuestion(this.dataset.question);
+        });
+
+    });
+
+
+    // Start a new conversation in the current page
+    document.getElementById("new-chat").addEventListener("click", function() {
+
+        chatBox.querySelectorAll(".message, .typing").forEach(element => {
+            element.remove();
+        });
+
+        welcome.style.display = "block";
+        suggestions.style.display = "grid";
+
+        questionInput.value = "";
+        questionInput.focus();
+
+    });
+
+</script>
+
+</body>
+</html>

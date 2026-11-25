@@ -1,0 +1,15 @@
+
+flowchart TD
+    A["Medical PDF"] --> B["PDF Text Extraction"]
+    B --> C["OCR for Scanned Pages"]
+    C --> D["Text Splitting"]
+    D --> E["Hugging Face Embeddings"]
+    E --> F[("Pinecone Vector Database")]
+
+    U["User Question"] --> G["Flask Application"]
+    G --> H["LangChain Retriever"]
+    F --> H
+    H --> I["Top 3 Relevant Chunks"]
+    I --> J["Gemini 3.1 Flash-Lite"]
+    U --> J
+    J --> K["Answer Displayed in Chatbot"]

@@ -1,0 +1,17 @@
+
+flask
+gunicorn
+python-dotenv
+pymupdf
+pdf2image
+pytesseract
+pillow
+langchain
+langchain-classic
+langchain-pinecone
+langchain-google-genai
+langchain-community
+langchain-text-splitters
+langchain-huggingface
+sentence-transformers
+pinecone
