@@ -152,7 +152,7 @@ http://127.0.0.1:8080
 
 ## 🖼️ Application Screenshots
 
-![Clinical Bot AI Chatbot](screenshots/chatbot.png)
+![Clinical Bot AI Chatbot](Screenshots/chatbot.png)
 
 ## 🔮 Future Enhancements
 
